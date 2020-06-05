@@ -28,19 +28,29 @@ class PdfView extends StatefulWidget {
 class _PdfViewState extends State<PdfView> {
   String pathPDF = "";
 
-  @override
-  void initState() {
-    super.initState();
-    createFileOfPdfUrl().then((f) {
+  // @override
+  // void initState() {
+  //   super.initState();
+  getDocument() async {
+    // super.initState();
+    await createFileOfPdfUrl().then((f) {
       setState(() {
         pathPDF = f.path;
         print(pathPDF);
       });
     });
   }
+  // }
 
   Future<File> createFileOfPdfUrl() async {
-    final url = "http://africau.edu/images/default/sample.pdf";
+    // final url =
+    //     "https://www.casasbahia-imagens.com.br/HotSite/2017/retira-rapido/images/PDF/Termo_Autoriza%C3%A7%C3%A3o_PF.pdf";
+    // final url = "http://africau.edu/images/default/sample.pdf";
+    // final url =
+    //     "http://www.detran.rj.gov.br/_include/on_line/formularios/CJC0031_troca_de_real_infrator.pdf";
+    final url = "http://www.conselhos.org.br/Arquivos/Download/Upload/116.pdf";
+    // final url =
+    //     "http://www.caixa.gov.br/Downloads/caixa-cartilhas/Termo_Unico_de_Responsabilidade_para_Adesao_ao_Servico_e_Mensagens_Via_Celular.pdf";
     final filename = url.substring(url.lastIndexOf("/") + 1);
     var request = await HttpClient().getUrl(Uri.parse(url));
     var response = await request.close();
@@ -58,10 +68,13 @@ class _PdfViewState extends State<PdfView> {
       body: Center(
         child: RaisedButton(
           child: Text("Open PDF"),
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => PDFScreen(pathPDF)),
-          ),
+          onPressed: () async {
+            await getDocument();
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PDFScreen(pathPDF)),
+            );
+          },
         ),
       ),
     );
